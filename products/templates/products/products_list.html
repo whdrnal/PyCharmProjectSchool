@@ -1,0 +1,27 @@
+{% extends 'layout.html'%}
+{% load static %}
+{% block content %}
+<section class="section-prod-list t-mt-3">
+    <div class="container">
+        <ul class="t-grid t-grid-cols-1 t-gap-[30px]">
+        <h1 class="t-text-[1.5rem] t-font-bold">상품리스트</h1>
+
+        <ul class="t-grid t-grid-cols-1 sm:t-grid-cols-2 md:t-grid-cols-3 lg:sm:t-grid-cols-4 t-gap-[20px] p-0 t-mt-3">
+            {% for product in product_list %}
+            <li class="t-flex t-flex-col">
+                <img src="http://annakids.co.kr/shopimages/varksy/0020020001032.jpg?1640073602" alt="">
+                <a href="{% url 'products:detail' product.id %}">
+                    <img class="t-block t-w-full" src="" alt="">
+                </a>
+                <a class="t-text-center" href="{% url 'products:detail' product.id %}">
+                    {{product.display_name}}
+                </a>
+                <a class="t-text-center" href="{% url 'products:detail' product.id %}">
+                    {{product.sale_price}}원
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 from markets.models import Market
 
 
@@ -20,6 +20,9 @@ class Product(models.Model):
     hit_count = models.PositiveIntegerField('조회수', default=0)
     review_count = models.PositiveIntegerField('리뷰수', default=0)
     review_point = models.PositiveIntegerField('리뷰평점', default=0)
+
+    def __str__(self):
+        return self.display_name
 
 
 class ProductReal(models.Model):

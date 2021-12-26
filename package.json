@@ -1,0 +1,22 @@
+{
+  "name": "mybase",
+  "version": "1.0.0",
+  "description": "- 테일윈드 프로젝트 명령어\r   - npx tailwindcss -i ./base/static/common.base.css -o ./base/static/common.css --watch",
+  "main": "index.js",
+  "scripts": {
+    "css":  "tailwindcss -i ./base/static/common.base.css -o ./base/static/common.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhs512/site224.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jhs512/site224/issues"
+  },
+  "homepage": "https://github.com/jhs512/site224#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.0.7"
+  }
+}

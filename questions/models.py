@@ -2,7 +2,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-# Create your models here.
 from accounts.models import User
 
 
@@ -15,6 +14,9 @@ class Question(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
     body = models.TextField('내용')
     is_complete = models.BooleanField('답변완료여부', default=False)
+
+    def __str__(self):
+        return f"{self.content_object}"
 
 
 class Answer(models.Model):

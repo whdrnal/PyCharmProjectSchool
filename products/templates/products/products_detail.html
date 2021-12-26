@@ -1,0 +1,45 @@
+{% extends 'layout.html'%}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <table class="table">
+        <thead>
+        <tr class="thead">
+            <th>상품명</th>
+            <th>실제판매가</th>
+            <th>권장판매가</th>
+            <th>리뷰 수</th>
+            <th>리뷰평점</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>{{ product.name }}</th>
+            <th>{{ product.price }}</th>
+            <th>{{ product.sale_price }}</th>
+            <th>{{ product.review_count }}</th>
+            <th>{{ product.review_point }}</th>
+        </tr>
+
+        </tbody>
+    </table>
+    <div class="t-flex t-text-center">
+        <form method="POST" action="{% url 'products:question_create' product.id %}">
+            {% csrf_token %}
+            <dev>
+                <textarea name="body" rows="10"></textarea>
+                <dev>
+                    <input type="submit" value="등록" class="btn btn-primary">
+                </dev>
+            </dev>
+        </form>
+    </div>
+        {% for question in question_list %}
+        <h3>{{ question.body }}</h3>
+           <a href="{% url 'products:question_modify' product.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+        </div>
+        {% endfor %}
+        </form>
+    </div>
+</div>
+{% endblock %}
