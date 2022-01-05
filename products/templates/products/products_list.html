@@ -1,27 +1,74 @@
-{% extends 'layout.html'%}
-{% load static %}
-{% block content %}
-<section class="section-prod-list t-mt-3">
-    <div class="container">
-        <ul class="t-grid t-grid-cols-1 t-gap-[30px]">
-        <h1 class="t-text-[1.5rem] t-font-bold">상품리스트</h1>
+{% extends "layout.html" %}
+{% load humanize %}
 
-        <ul class="t-grid t-grid-cols-1 sm:t-grid-cols-2 md:t-grid-cols-3 lg:sm:t-grid-cols-4 t-gap-[20px] p-0 t-mt-3">
+{%block content %}
+{% with img_box_class="t-relative t-overflow-hidden t-rounded" %}
+{% with img_box_before_class="before:t-content-[''] before:t-absolute before:t-inset-0 before:t-bg-[#00000000] group-hover:before:t-bg-[#00000055] before:t-transition-all" %}
+{% with img_box_after_class="after:t-content-[attr(data-before)] after:t-hidden group-hover:after:t-block after:t-no-underline after:t-text-white after:t-border-2 after:t-border-white after:t-border-solid after:t-rounded after:t-p-2 after:t-whitespace-nowrap after:t-absolute after:t-top-[50%] after:t-left-[50%] after:t-translate-y-[-50%] after:t-translate-x-[-50%] after:t-transition-all" %}
+
+<section class="section-prod-list">
+    <div class="container">
+        <center>
+        <h1 class="t-text-[1.2rem] t-font-bold">최신 상품리스트</h1>
+        </center>
+        <ul class="t-mg-pull t-grid t-grid-cols-1 sm:t-grid-cols-2 md:t-grid-cols-3 lg:sm:t-grid-cols-4 t-gap-[20px] t-mt-3 p-0">
             {% for product in product_list %}
-            <li class="t-flex t-flex-col">
-                <img src="http://annakids.co.kr/shopimages/varksy/0020020001032.jpg?1640073602" alt="">
-                <a href="{% url 'products:detail' product.id %}">
-                    <img class="t-block t-w-full" src="" alt="">
+            <li class="t-flex t-flex-col t-group">
+                <a data-before="VIEW MORE" href="{% url 'products:detail' product.id %}" class="{{img_box_class}} {{img_box_before_class}} {{img_box_after_class}}">
+                    <img class="t-block t-w-full t-transition-all group-hover:t-scale-110 t-relative t--z-50" src="{{product.thumb_img_url}}" alt="">
                 </a>
-                <a class="t-text-center" href="{% url 'products:detail' product.id %}">
+                <a class="t-text-center t-mt-2 t-no-underline t-text-black t-italic group-hover:t-underline" href="{% url 'products:detail' product.id %}">
                     {{product.display_name}}
                 </a>
-                <a class="t-text-center" href="{% url 'products:detail' product.id %}">
-                    {{product.sale_price}}원
+                <a class="t-text-center t-mt-2 t-no-underline t-text-gray-400 group-hover:t-text-blue-500" href="{% url 'products:detail' product.id %}">
+                    <i class="fas fa-won-sign"></i>
+                    <span>{{ product.sale_price|intcomma }}</span>
                 </a>
             </li>
             {% endfor %}
         </ul>
     </div>
 </section>
-{% endblock %}
+{% endwith %}
+{% endwith %}
+{% endwith %}
+
+<!-- 페이징처리 시작 -->
+<ul class="pagination justify-content-center">
+    <!-- 이전페이지 -->
+    {% if product_list.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ products.previous_page_number }}&search_keyword={{request.GET.search_keyword}}">이전</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+    </li>
+    {% endif %}
+    <!-- 페이지리스트 -->
+    {% for page_number in product_list.paginator.page_range %}
+    {% if page_number >= product_list.number|add:-5 and page_number <= product_list.number|add:5 %}
+    {% if page_number == product_list.number %}
+    <li class="page-item active" aria-current="page">
+        <a class="page-link" href="?page={{ page_number }}&search_keyword={{request.GET.search_keyword}}">{{ page_number }}</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_number }}&search_keyword={{request.GET.search_keyword}}">{{ page_number }}</a>
+    </li>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    <!-- 다음페이지 -->
+    {% if product_list.has_next %}
+    <li class="page-item">
+         <a class="page-link" href="?page={{ products.next_page_number }}&search_keyword={{request.GET.search_keyword}}">다음</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a class="page-link" tabindex="0" aria-disabled="true" href="#">다음</a>
+    </li>
+    {% endif %}
+</ul>
+<!-- 페이징처리 끝 -->
+{%endblock%}

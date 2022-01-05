@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+{% load humanize %}
+{%block content %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
+    />
+    <!-- Link Swiper's CSS -->
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+
+    <!-- Demo styles -->
+    <style>
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swiper {
+        margin-top:60px;
+        width: 100%;
+        height: 80%;
+      }
+
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .swiper-button-next{
+        color:white;
+      }
+      .swiper-button-prev{
+         color:white;
+      }
+
+    </style>
+</head>
+
+<body>
+<!-- 메인로고자리 -->
+<center>
+    <a href="http://localhost:8000/"><img src="http://zoozoom.co.kr/design/zoom/phps/common/tlogo.png"></a>
+</center>
+
+<!-- Swiper -->
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        <!-- 1번 슬라이드 -->
+        <div class="swiper-slide">
+            <img src="http://www.wingsmall.co.kr/web/upload/NNEditor/20211115/78f47a2a1e03aa6e89dc03613881f5ff.jpg" alt="">
+        </div>
+        <!-- 2번 슬라이드 -->
+        <div class="swiper-slide">
+            <img src="http://www.wingsmall.co.kr/web/upload/NNEditor/20211207/5b1ee256af5855a085b165d5f9b30af4.jpg" alt="">
+        </div>
+        <!-- 3번 슬라이드 -->
+        <div class="swiper-slide">
+            <img src="http://www.wingsmall.co.kr/web/upload/NNEditor/20211230/eb871515e124febcaa9bad346ecd0937.jpg" alt="">
+        </div>
+        <!-- 4번 슬라이드 -->
+        <div class="swiper-slide">
+            <img src="http://www.wingsmall.co.kr/web/upload/NNEditor/20211109/c49e162caf4c1755f778d86472fa9ce7.jpg" alt="">
+        </div>
+        <!-- 5번 슬라이드 -->
+        <div class="swiper-slide">
+            <img src="https://www.realcoco.com/SkinImg/comon/main_banner_pc/1_202110220853249166.jpg" alt="">
+        </div>
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+</div>
+
+
+
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
+</body>
+</html>
+
+{%endblock%}

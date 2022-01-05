@@ -1,27 +1,64 @@
-{% extends 'layout.html'%}
-{% load static %}
-{% block content %}
-<div class="container">
-    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-    <form method="post" class="post-form my-3">
-        {% csrf_token %}
-        <!-- 오류표시 Start -->
-        {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for field in form %}
-                {% if field.errors %}
-                <strong>{{ field.label }}</strong>
-                {{ field.errors }}
-                {% endif %}
-            {% endfor %}
+{% extends "layout.html" %}
+{% load humanize %}
+{% load django_bootstrap5 %}
+
+{%block content %}
+<section class="section-prod-question-modify">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                상품상세정보
             </div>
-        {% endif %}
-        <!-- 오류표시 End -->
-        <div class="form-group">
-            <label for="body">내용</label>
-            <textarea class="form-control" name="body" id="body" rows="10">{{ form.body.value|default_if_none:'' }}</textarea>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <img class="t-w-full t-max-w-[300px]" src="{{product.thumb_img_url}}" alt="">
+                </li>
+                <li class="list-group-item">
+                    번호 : <span class="badge bg-primary">{{product.id}}</span>
+                </li>
+                <li class="list-group-item">
+                    등록날짜 : <span class="badge bg-secondary">{{product.reg_date}}</span>
+                </li>
+                <li class="list-group-item">
+                    수정날짜 : <span class="badge bg-secondary">{{product.update_date}}</span>
+                </li>
+                <li class="list-group-item">
+                    상품명 : <span class="t-font-bold">{{product.display_name}}</span>
+                </li>
+                <li class="list-group-item">
+                    가격 : <span class="t-font-bold">{{product.sale_price|intcomma}}</span>원
+                </li>
+                <li class="list-group-item">
+                    마켓 : <span class="badge bg-primary">{{product.market.name}}</span>
+                </li>
+            </ul>
+
         </div>
-        <button type="submit" class="btn btn-primary">저장하기</button>
-    </form>
-</div>
-{% endblock %}
+
+        <div class="card t-mt-5">
+            <div class="card-header">
+                상품질문수정
+            </div>
+
+            <div class="card-body">
+                <form method="POST" action="{% url 'products:question_modify' product.id question.id %}">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% bootstrap_button button_type="submit" content="질문수정" %}
+                    {% bootstrap_button button_type="reset" content="취소" %}
+
+                </form>
+                <script>
+                    let $lastForm = $('form').last();
+                    $(window).on('load', function() {
+                        $(window).scrollTop($lastForm.offset().top);
+                    });
+                </script>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{%endblock%}

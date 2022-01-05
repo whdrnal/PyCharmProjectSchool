@@ -1,45 +1,104 @@
-{% extends 'layout.html'%}
-{% load static %}
-{% block content %}
-<div class="container my-5">
-    <table class="table">
-        <thead>
-        <tr class="thead">
-            <th>상품명</th>
-            <th>실제판매가</th>
-            <th>권장판매가</th>
-            <th>리뷰 수</th>
-            <th>리뷰평점</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th>{{ product.name }}</th>
-            <th>{{ product.price }}</th>
-            <th>{{ product.sale_price }}</th>
-            <th>{{ product.review_count }}</th>
-            <th>{{ product.review_point }}</th>
-        </tr>
+{% extends "layout.html" %}
+{% load humanize %}
+{% load django_bootstrap5 %}
 
-        </tbody>
-    </table>
-    <div class="t-flex t-text-center">
-        <form method="POST" action="{% url 'products:question_create' product.id %}">
-            {% csrf_token %}
-            <dev>
-                <textarea name="body" rows="10"></textarea>
-                <dev>
-                    <input type="submit" value="등록" class="btn btn-primary">
-                </dev>
-            </dev>
-        </form>
-    </div>
-        {% for question in question_list %}
-        <h3>{{ question.body }}</h3>
-           <a href="{% url 'products:question_modify' product.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+{%block content %}
+
+<section class="section-prod-detail">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                상품상세정보
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <img class="t-w-full t-max-w-[300px]" src="{{product.thumb_img_url}}" alt="">
+                </li>
+                <li class="list-group-item">
+                    번호 : <span class="badge bg-primary">{{product.id}}</span>
+                </li>
+                <li class="list-group-item">
+                    등록날짜 : <span class="badge bg-secondary">{{product.reg_date}}</span>
+                </li>
+                <li class="list-group-item">
+                    수정날짜 : <span class="badge bg-secondary">{{product.update_date}}</span>
+                </li>
+                <li class="list-group-item">
+                    상품명 : <span class="t-font-bold">{{product.display_name}}</span>
+                </li>
+
+                </li>
+                <li class="list-group-item">
+                    마켓 : <span class="badge bg-primary">{{product.market.name}}</span>
+                </li>
+            </ul>
         </div>
-        {% endfor %}
-        </form>
+        <div class="card t-mt-[30px]">
+            <div class="card-header">
+                옵션
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for product_real in product_reals %}
+                <li class="list-group-item">
+                    {{product_real.option_1_type}} : <span class="badge bg-secondary">{{product_real.option_1_display_name}}</span>
+
+                    {{product_real.option_2_type}} : <span class="badge bg-secondary">{{product_real.option_2_display_name}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="card t-mt-[30px]">
+            <div class="card-header">
+                질문등록
+            </div>
+            <div class="card-body">
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'products:question_create' product.id %}">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% bootstrap_button button_type="submit" content="질문작성" %}
+                    {% bootstrap_button button_type="reset" content="취소" %}
+                </form>
+                {% else %}
+                <a href="{% url 'accounts:login' %}?next={{request.get_full_path}}">로그인</a> 후 이용해주세요.
+                {% endif %}
+
+                {% if question_form.errors %}
+                <script>
+                    let $form = $('form').last();
+                    $(function() {
+                        $(window).scrollTop($form.offset().top, 0);
+                    });
+                </script>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="card t-mt-[30px]">
+            <div class="card-header">
+                질문리스트
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for question in question_list %}
+                <li class="list-group-item">
+                    <span class="badge bg-secondary ">{{ forloop.counter }}</span>
+                    {{question.body}}
+                    {% if question.user == request.user %}
+                    <a href="{% url 'products:question_delete' product.id question.id %}" class="btn btn-sm btn-warning"
+                       onclick="if ( confirm('정말 삭제하시겠습니까?') == false ) return false;">삭제</a>
+                    {% endif %}
+                    {% if question.user == request.user %}
+                    <a href="{% url 'products:question_modify' product.id question.id %}"
+                       class="btn btn-sm btn-secondary">수정</a>
+                    {% endif %}
+                    <br>
+                    작성자 : {{ question.user }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
-</div>
-{% endblock %}
+</section>
+{%endblock%}
